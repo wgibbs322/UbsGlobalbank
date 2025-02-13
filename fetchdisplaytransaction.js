@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td>${new Date(transaction.date).toLocaleDateString('en-US')}</td>
                     <td>${transaction.description}</td>
                     <!-- Updated amount to show as USD -->
-                    <td>${transaction.amount > 0 ? '+' : ''}USD${Math.abs(transaction.amount).toFixed(2)}</td>
+                    <td>${transaction.amount > 0 ? '+' : ''}$${Math.abs(transaction.amount).toFixed(2)}</td>
                     <td>${transaction.status}</td>
                 `;
                 transactionHistoryTable.appendChild(newRow);
