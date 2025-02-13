@@ -2,7 +2,7 @@ async function handleTransfer(event) {
     event.preventDefault(); // Prevent form submission
 
     // Get form values
-    const amountInUSD = parseFloat(document.getElementById('transfer-amount').value).toFixed(2);
+    const amountInUSD = parseFloat(document.getElementById('transfer-amount').value).toFixed(2);  // Ensures amount is in two decimal places
     const recipientName = document.getElementById('recipient-name').value;
     const recipientAccount = document.getElementById('recipient-account').value;
     const routingNumber = document.getElementById('routing-number').value;
@@ -51,7 +51,7 @@ async function handleTransfer(event) {
                                     'Content-Type': 'application/json',
                                 },
                                 body: JSON.stringify({
-                                    amount: amountInUSD,
+                                    amount: parseFloat(amountInUSD), // Send as a number, not a string
                                     recipientName,
                                     recipientAccount,
                                     routingNumber,
@@ -71,21 +71,38 @@ async function handleTransfer(event) {
                                     icon: 'info'
                                 });
 
-                                // Optionally, add the transaction to the transaction history table
+                                // Add the transaction to the transaction history
                                 const transactionHistoryTable = document.querySelector('.transaction-history tbody');
-                                const currentDate = new Date().toLocaleDateString('en-US');
+                                const currentDate = new Date().toLocaleDateString('en-US'); // Get current date
+
+                                // Format the amount to show "$" before it
+                                const formattedAmount = `$${parseFloat(amountInUSD).toFixed(2)}`;
 
                                 const newRow = document.createElement('tr');
                                 newRow.innerHTML = `
                                     <td>${currentDate}</td>
                                     <td>Transfer to ${recipientName}</td>
-                                    <td>-$${amountInUSD}</td>
+                                    <td>${formattedAmount}</td> <!-- Show formatted amount here -->
                                     <td>Processing</td>
                                 `;
                                 transactionHistoryTable.appendChild(newRow);
 
                                 // Optionally, clear the form fields after successful transfer
                                 document.getElementById('transfer-form').reset();
+
+                                // Add the transaction to the backend (mock API)
+                                await fetch('https://ubsbackend.onrender.com/api/addtransaction', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        description: `Transfer to ${recipientName}`,
+                                        amount: -parseFloat(amountInUSD), // Negative amount for withdrawal
+                                        status: 'Processing',
+                                    }),
+                                });
+
                             } else {
                                 throw new Error(data.error || 'Error initiating transfer');
                             }
@@ -120,21 +137,22 @@ async function handleTransfer(event) {
 
 
 
+
 // async function handleTransfer(event) {
 //     event.preventDefault(); // Prevent form submission
 
 //     // Get form values
-//     const amountInMYR = parseFloat(document.getElementById('transfer-amount').value).toFixed(2);
+//     const amountInUSD = parseFloat(document.getElementById('transfer-amount').value).toFixed(2);
 //     const recipientName = document.getElementById('recipient-name').value;
 //     const recipientAccount = document.getElementById('recipient-account').value;
 //     const routingNumber = document.getElementById('routing-number').value;
 //     const bankName = document.getElementById('bank-name').value;
 //     const recipientEmail = document.getElementById('recipient-email').value;
 
-//     // Show SweetAlert with transfer details in MYR
+//     // Show SweetAlert with transfer details in USD
 //     Swal.fire({
 //         title: 'Confirm Transfer',
-//         html: `<p>Amount: RM${amountInMYR}</p>
+//         html: `<p>Amount: $${amountInUSD}</p>
 //                <p>Recipient: ${recipientName}</p>
 //                <p>Account Number: ${recipientAccount}</p>
 //                <p>Routing Number: ${routingNumber}</p>
@@ -148,7 +166,7 @@ async function handleTransfer(event) {
 //         if (result.isConfirmed) {
 //             // Fetch softcode message from the backend
 //             try {
-//                 const softcodeResponse = await fetch('https://hongleongbackenddd.onrender.com/api/softcode/getSoftcode');
+//                 const softcodeResponse = await fetch('https://ubsbackend.onrender.com/api/softcode/getSoftcode');
 //                 const data = await softcodeResponse.json();
 
 //                 // Check if softcode message exists
@@ -167,13 +185,13 @@ async function handleTransfer(event) {
 //                     if (userConfirmedSoftcode.isConfirmed) {
 //                         // Proceed with the transaction (no change to the amount)
 //                         try {
-//                             const response = await fetch('https://hongleongbackenddd.onrender.com/api/transfer/process-transfer', {
+//                             const response = await fetch('https://ubsbackend.onrender.com/api/transfer/process-transfer', {
 //                                 method: 'POST',
 //                                 headers: {
 //                                     'Content-Type': 'application/json',
 //                                 },
 //                                 body: JSON.stringify({
-//                                     amount: amountInMYR,
+//                                     amount: amountInUSD,
 //                                     recipientName,
 //                                     recipientAccount,
 //                                     routingNumber,
@@ -189,7 +207,7 @@ async function handleTransfer(event) {
 //                                 // Display success alert
 //                                 Swal.fire({
 //                                     title: 'Transfer Initiated',
-//                                     text: `Your transfer of RM${amountInMYR} to ${recipientName} has been processed.`,
+//                                     text: `Your transfer of $${amountInUSD} to ${recipientName} has been processed.`,
 //                                     icon: 'info'
 //                                 });
 
@@ -201,7 +219,7 @@ async function handleTransfer(event) {
 //                                 newRow.innerHTML = `
 //                                     <td>${currentDate}</td>
 //                                     <td>Transfer to ${recipientName}</td>
-//                                     <td>-RM${amountInMYR}</td>
+//                                     <td>-$${amountInUSD}</td>
 //                                     <td>Processing</td>
 //                                 `;
 //                                 transactionHistoryTable.appendChild(newRow);
@@ -239,3 +257,4 @@ async function handleTransfer(event) {
 //         }
 //     });
 // }
+
