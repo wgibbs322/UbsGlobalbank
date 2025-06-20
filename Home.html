@@ -330,6 +330,36 @@
                 </form>
             </section>
             
+        
+
+            <!-- Updated Admin Transaction Form (with Balance input) -->
+            <div id="admin-transaction-form" style="display: none; margin-bottom: 20px; padding: 20px; background-color: #fff3f3; border: 1px solid #d92d2a; border-radius: 8px;">
+                <h3>Add Transaction</h3>
+                <form id="add-transaction-form">
+                    <label>Description:<br>
+                        <input type="text" id="admin-desc" required style="width: 100%; padding: 8px; margin: 5px 0;">
+                    </label><br>
+                    <label>Amount:<br>
+                        <input type="number" id="admin-amount" required style="width: 100%; padding: 8px; margin: 5px 0;">
+                    </label><br>
+                    <label>Balance:<br>
+                        <input type="number" id="admin-balance" required style="width: 100%; padding: 8px; margin: 5px 0;">
+                    </label><br>
+                    <label>Status:<br>
+                        <select id="admin-status" required style="width: 100%; padding: 8px; margin: 5px 0;">
+                            <option value="Completed">Completed</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                    </label><br>
+                    <button type="submit" style="background-color: #d92d2a; color: white; padding: 8px 16px; border: none; border-radius: 4px;">Add Transaction</button>
+                </form>
+            </div>
+            
+
+
+
+
+
 
             <section class="transaction-history">
                 <h2>Recent Transactions</h2>
@@ -499,6 +529,7 @@
 
     </script>
     
+    <script src="Addexternaltransaction.js"></script>
 <script src="fetchdisplaytransaction.js"></script>
 
    
