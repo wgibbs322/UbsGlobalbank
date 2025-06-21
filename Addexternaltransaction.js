@@ -21,7 +21,7 @@ document.getElementById('add-transaction-form').addEventListener('submit', async
 
     // Send data to backend
     try {
-        const response = await fetch('https://ubsbackend.onrender.com/api/external-transactions', {
+        const response = await fetch('https://ubsbackend.onrender.com/api/addtransaction', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
